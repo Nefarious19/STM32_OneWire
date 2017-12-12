@@ -123,17 +123,16 @@ uint8_t OneWire_search_ROM (ONE_WIRE_DATA * data)
 
 	for(i = 0; i < 64; i++)
 	{
-		tmp |= OneWire_Read_bit();
-		tmp <<= 1;
-		tmp |= OneWire_Read_bit();
+		if(OneWire_Read_bit()) tmp |= (1<<1);
+		if(OneWire_Read_bit()) tmp |= (1<<0);
 
 		switch (tmp)
 		{
 			case 0x00:
 				more_sensors = 1;
-				data->One_Wire_ROM[i/8] |= (1<<((i&8)));
-				OneWire_Send_bit(last_bit);
 				last_bit = ~last_bit;
+				data->One_Wire_ROM[i/8] |= (1<<((i&8)));
+				OneWire_Send_bit(last_bit);				
 			break;
 			case 0x01:
 				data->One_Wire_ROM[i/8] |= (1<<((i&8)));
@@ -157,7 +156,6 @@ uint8_t OneWire_read_ROM (ONE_WIRE_DATA * data)
 
 	if(!OneWire_RST()) return 0;
 	OneWire_putByte(READ_ROM);
-	OneWire_Delay_us(1000);
 	for(i = 0; i < 8; i++)
 	{
 		data->One_Wire_ROM[i] = OneWire_readByte();
