@@ -8,6 +8,10 @@
 #ifndef ONE_WIRE_ONE_WIRE_H_
 #define ONE_WIRE_ONE_WIRE_H_
 
+
+#define NUMBER_OF_SENSORS 3
+
+
 typedef uint8_t bool;
 
 
@@ -30,14 +34,14 @@ extern volatile uint32_t OneWire_delay_cnt;
 
 typedef struct
 {
-	uint8_t byte1;
+	uint8_t FAMILY;
 	uint8_t byte2;
 	uint8_t byte3;
 	uint8_t byte4;
 	uint8_t byte5;
 	uint8_t byte6;
 	uint8_t byte7;
-	uint8_t byte8;
+	uint8_t CRC_VAL;
 
 } ONEWIRE_ROM;
 
@@ -48,6 +52,18 @@ typedef union
 	ONEWIRE_ROM adres;
 
 } ONE_WIRE_DATA;
+
+typedef enum
+{
+	ONE_WIRE_SENSOR_NOT_FOUND,
+	ONE_WIRE_SENSORS_FOUND,
+	ON_WIRE_LAST_SENSOR_FOUND,
+	ON_WIRE_SEARCH_ERROR
+
+}ONE_WIRE_STATE;
+
+
+
 
 void OneWire_DelayDecrement (void);
 void OneWire_INIT (void);
