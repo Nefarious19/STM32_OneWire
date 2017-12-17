@@ -131,14 +131,7 @@ uint8_t OneWire_search_ROM (ONE_WIRE_DATA * data)
 	uint8_t bit_position = 0;
 	uint8_t return_value = 0;
 
-	if(function_call_number > NUMBER_OF_SENSORS)
-	{
-		return ON_WIRE_LAST_SENSOR_FOUND;
-	}
-	else
-	{
-		function_call_number++;
-	}
+
 
 	if(!OneWire_RST()) return_value = ONE_WIRE_SENSOR_NOT_FOUND;
 	else
@@ -195,6 +188,15 @@ uint8_t OneWire_search_ROM (ONE_WIRE_DATA * data)
 	if( ( data->adres.CRC_VAL > 0) && ( data->adres.CRC_VAL < 255) )
 	{
 		return_value = ONE_WIRE_SENSORS_FOUND;
+	}
+
+	if(function_call_number > NUMBER_OF_SENSORS)
+	{
+		return_value =  ON_WIRE_LAST_SENSOR_FOUND;
+	}
+	else
+	{
+		function_call_number++;
 	}
 
 	return return_value;
